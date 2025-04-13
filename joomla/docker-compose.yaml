@@ -1,0 +1,27 @@
+version: "3.1"
+
+services:
+  joomla:
+    image: joomla:latest
+    container_name: joomla-container
+    ports:
+      - "8080:80"
+    environment:
+      JOOMLA_DB_HOST: database
+      JOOMLA_DB_USER: joomla_user
+      JOOMLA_DB_PASSWORD: joomla_password
+      JOOMLA_DB_NAME: joomla_db
+    depends_on:
+      - database
+
+  database:
+    image: mysql:8.0.13
+    container_name: joomla-db-container
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: joomla_db
+      MYSQL_USER: joomla_user
+      MYSQL_PASSWORD: joomla_password
