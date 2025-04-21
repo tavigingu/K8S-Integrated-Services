@@ -1,0 +1,42 @@
+# Ignoră fișierele temporare și de sistem
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Ignoră directorul de dependențe pentru ambele proiecte
+node_modules/
+vendor/
+
+# Ignoră fișierele generate de build
+dist/
+build/
+.angular/
+*.out
+
+# Ignoră fișierele de configurare locală și cache
+.env
+*.env.*
+npm-debug.log
+yarn-error.log
+.cache/
+
+# Ignoră fișierele de dependențe Go
+backend-go/bin/
+backend-go/pkg/
+
+# Ignoră fișierele de test și coverage
+coverage/
+*.test
+*.test.*
+
+# Ignoră fișierele de configurare IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignoră fișierele generate de Angular
+frontend-angular/dist/
+frontend-angular/.angular/
+frontend-angular/node_modules/

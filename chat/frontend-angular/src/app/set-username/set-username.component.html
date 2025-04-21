@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="username-card">
+      <h2>Bine ai venit la Chat!</h2>
+      <p>Introdu numele tău de utilizator:</p>
+      <input 
+        type="text" 
+        [(ngModel)]="username" 
+        placeholder="Nume utilizator" 
+        class="username-input"
+        (keyup.enter)="setUsername()"
+      />
+      <button 
+        class="join-button" 
+        (click)="setUsername()"
+        [disabled]="!username.trim()"
+      >
+        Intră în chat
+      </button>
+    </div>
+  </div>

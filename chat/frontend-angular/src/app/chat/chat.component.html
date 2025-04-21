@@ -1,0 +1,27 @@
+<div class="chat-container">
+    <div class="chat-header">
+      <h2>Chat</h2>
+    </div>
+    <div class="chat-messages" #messageContainer>
+      <div *ngFor="let message of messages" class="message" [ngClass]="{'my-message': message.username === username}">
+        <div class="message-content">
+          <span class="username">{{ message.username }}</span>
+          <span class="timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+          <p>{{ message.content }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input 
+        type="text" 
+        [(ngModel)]="newMessage" 
+        placeholder="Scrie un mesaj..." 
+        (keyup.enter)="sendMessage()"
+      />
+      <button (click)="sendMessage()" [disabled]="!newMessage.trim()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
