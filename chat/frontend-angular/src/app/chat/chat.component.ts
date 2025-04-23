@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
 import { ChatService } from '../services/chat.service';
 import { Message } from '../models/message.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -11,14 +12,17 @@ import { CommonModule } from '@angular/common';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   messages: Message[] = [];
   newMessage: string = '';
   username: string = '';
+  private subscription: Subscription;
 
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService) {
+    this.subscription = new Subscription();
+  }
 
   ngOnInit(): void {
     const storedUsername = localStorage.getItem('username');
@@ -28,18 +32,44 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       window.location.href = '/';
       return;
     }
-    this.loadMessages();
-    setInterval(() => this.loadMessages(), 5000);
+
+    // Încărcăm mesajele inițiale folosind REST
+    this.loadInitialMessages();
+
+    // Apoi ascultăm pentru mesaje noi prin WebSocket
+    this.subscription.add(
+      this.chatService.messages$.subscribe(message => {
+        // Verificăm dacă mesajul există deja pentru a evita duplicatele
+        const exists = this.messages.some(m => 
+          m.id === message.id || 
+          (m.content === message.content && 
+           m.username === message.username && 
+           m.timestamp === message.timestamp)
+        );
+        
+        if (!exists) {
+          this.messages.push(message);
+          setTimeout(() => this.scrollToBottom(), 100);
+        }
+      })
+    );
   }
 
   ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
 
-  loadMessages(): void {
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  loadInitialMessages(): void {
     this.chatService.getMessages().subscribe({
       next: (messages) => {
         this.messages = messages;
+        setTimeout(() => this.scrollToBottom(), 100);
       },
       error: (err) => {
         console.error('Eroare la încărcarea mesajelor:', err);
@@ -53,15 +83,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         content: this.newMessage,
         username: this.username
       };
-      this.chatService.sendMessage(message).subscribe({
-        next: () => {
-          this.newMessage = '';
-          this.loadMessages();
-        },
-        error: (err) => {
-          console.error('Eroare la trimiterea mesajului:', err);
-        }
-      });
+      
+      this.chatService.sendMessage(message);
+      this.newMessage = '';
     }
   }
 
