@@ -1,45 +1,13 @@
 # Ignoră fișierele de mediu
 .env
 *.env
-.env.local
-.env.development
-.env.production
 
-# Ignoră binarele compilate
+# Ignoră binarele și fișierele generate
 bin/
 *.exe
 *.exe~
-*.dll
-*.so
-*.dylib
-
-# Ignoră dependențele Go
 vendor/
-
-# Ignoră fișierele temporare
 *.log
-*.tmp
-*.temp
-tmp/
-
-# Ignoră fișierele de build și cache
-*.o
-*.a
-*.out
 go.sum
-go.work
-
-# Ignoră fișierele generate de IDE-uri
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-
-# Ignoră fișierele de configurare specifice sistemului
-.DS_Store
-Thumbs.db
-
-# Ignoră fișierele de test sau coverage
 *.test
-*.prof
 coverage.out
