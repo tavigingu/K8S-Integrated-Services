@@ -1,0 +1,47 @@
+# Stage 1: Build the Angular application
+FROM node:20-alpine as build
+
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Create environment directory and files if they don't exist
+RUN mkdir -p src/environments
+
+# Create or overwrite environment.prod.ts
+RUN echo "export const environment = { \
+    production: true, \
+    apiUrl: 'http://localhost:88', \
+    wsUrl: 'ws://localhost:88/ws' \
+    };" > src/environments/environment.prod.ts
+
+# Create or overwrite environment.ts
+RUN echo "export const environment = { \
+    production: false, \
+    apiUrl: 'http://localhost:88', \
+    wsUrl: 'ws://localhost:88/ws' \
+    };" > src/environments/environment.ts
+
+# Build the application for production
+RUN npm run build -- --configuration=production
+
+# Stage 2: Serve the application using Nginx
+FROM nginx:alpine
+
+# Copy the custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy the built application from the previous stage
+COPY --from=build /app/dist/frontend-angular/browser /usr/share/nginx/html
+
+# Expose port 90 as specified in your nginx config
+EXPOSE 90
+
+CMD ["nginx", "-g", "daemon off;"]

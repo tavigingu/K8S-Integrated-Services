@@ -1,23 +1,37 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Message } from '../models/message.model';
+import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private socket: WebSocket = new WebSocket('');
-  private apiUrl = 'http://localhost:8080';
-  private wsUrl = 'ws://localhost:8080/ws';
+  private socket: WebSocket | null = null;
+  // private apiUrl = 'http://localhost:8080';
+  // private wsUrl = 'ws://localhost:8080/ws';
+  private apiUrl = environment.apiUrl; // Folosește variabila de mediu
+  private wsUrl = environment.wsUrl;
   private messagesSubject = new Subject<Message>();
   public messages$ = this.messagesSubject.asObservable();
+  private isBrowser: boolean;
 
-  constructor(private http: HttpClient) {
-    this.connectWebSocket();
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+    
+    if (this.isBrowser) {
+      this.connectWebSocket();
+    }
   }
 
   private connectWebSocket() {
+    if (!this.isBrowser) return;
+    
     this.socket = new WebSocket(this.wsUrl);
 
     this.socket.onopen = () => {
@@ -40,14 +54,16 @@ export class ChatService {
   }
 
   sendMessage(message: Message): void {
-    if (this.socket.readyState === WebSocket.OPEN) {
+    if (!this.isBrowser) return;
+    
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(message));
     } else {
       console.error('WebSocket is not connected. Message not sent.');
     }
   }
 
-  // Păstrăm metoda REST pentru încărcarea inițială sau backup
+  //Păstrăm metoda REST pentru încărcarea inițială sau backup
   getMessages(): Observable<Message[]> {
     return this.http.get<Message[]>(`${this.apiUrl}/messages`);
   }

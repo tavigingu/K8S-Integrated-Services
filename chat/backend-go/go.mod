@@ -9,6 +9,8 @@ require (
 	go.mongodb.org/mongo-driver v1.17.3
 )
 
+require github.com/joho/godotenv v1.5.1 // indirect
+
 require (
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect

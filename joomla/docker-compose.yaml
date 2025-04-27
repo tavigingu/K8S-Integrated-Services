@@ -11,6 +11,8 @@ services:
       JOOMLA_DB_USER: joomla_user
       JOOMLA_DB_PASSWORD: joomla_password
       JOOMLA_DB_NAME: joomla_db
+    volumes:
+      - joomla_data:/var/www/html
     depends_on:
       - database
 
@@ -25,3 +27,9 @@ services:
       MYSQL_DATABASE: joomla_db
       MYSQL_USER: joomla_user
       MYSQL_PASSWORD: joomla_password
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  joomla_data:
+  db_data:

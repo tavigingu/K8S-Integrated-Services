@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -35,6 +36,13 @@ func init() {
 }
 
 func main() {
+	// Citim portul din variabila de mediu
+	port := os.Getenv("SERVER_PORT")
+	if port == "" {
+		port = "8080" // Valoare implicită
+		log.Println("Variabila SERVER_PORT nu este setată, se folosește portul implicit:", port)
+	}
+
 	router := mux.NewRouter()
 
 	// Rută pentru WebSocket
@@ -53,8 +61,8 @@ func main() {
 	// Pornim un goroutine pentru gestionarea mesajelor
 	go handleMessages()
 
-	log.Println("Server pornit pe port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", corsHandler))
+	log.Println("Server pornit pe port", port)
+	log.Fatal(http.ListenAndServe(":"+port, corsHandler))
 }
 
 func handleConnections(w http.ResponseWriter, r *http.Request) {

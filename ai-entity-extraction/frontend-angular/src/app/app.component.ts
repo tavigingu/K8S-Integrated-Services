@@ -1,12 +1,23 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  // Remove the standalone property
+  standalone: false,
+  template: `
+    <app-navigation></app-navigation>
+    <main class="container">
+      <router-outlet></router-outlet>
+    </main>
+  `,
+  styles: [`
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  `]
 })
 export class AppComponent {
-  title = 'frontend-angular';
+  title = 'AI Entity Extraction';
 }

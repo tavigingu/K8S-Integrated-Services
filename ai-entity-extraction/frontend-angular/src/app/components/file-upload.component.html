@@ -1,0 +1,91 @@
+<div class="upload-container">
+    <h2>Upload File for Entity Extraction</h2>
+    <p class="description">Upload text or JSON files to extract entities using Azure AI services.</p>
+    
+    <div 
+      class="upload-area" 
+      [class.active]="isDragging" 
+      [class.has-file]="selectedFile"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <div class="upload-content">
+        <div class="upload-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+        </div>
+        <ng-container *ngIf="!selectedFile">
+          <h3>Drag & Drop your file here</h3>
+          <p>or</p>
+          <label class="browse-button">
+            Browse Files
+            <input type="file" (change)="onFileSelected($event)" accept=".txt,.json" hidden>
+          </label>
+          <p class="hint">Supports: .txt, .json (Max 10MB)</p>
+        </ng-container>
+        
+        <ng-container *ngIf="selectedFile">
+          <h3>{{ selectedFile.name }}</h3>
+          <p>{{ formatFileSize(selectedFile.size) }}</p>
+          <div class="file-actions">
+            <button class="change-file-button" (click)="resetFile()">
+              Change File
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    
+    <ng-container *ngIf="selectedFile && !uploading && !uploadSuccess">
+      <button class="upload-button" (click)="uploadFile()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        Upload File
+      </button>
+    </ng-container>
+    
+    <div *ngIf="uploading" class="upload-progress">
+      <div class="progress-header">
+        <span>Uploading...</span>
+        <span>{{ uploadProgress }}%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+      </div>
+    </div>
+    
+    <div *ngIf="uploadSuccess" class="upload-success">
+      <div class="success-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <h3>Upload Successful!</h3>
+      <p>Your file has been uploaded and is being processed.</p>
+      <div class="success-actions">
+        <button class="primary-button" (click)="viewFile()">
+          View File Details
+        </button>
+        <button class="secondary-button" (click)="resetForm()">
+          Upload Another File
+        </button>
+      </div>
+    </div>
+    
+    <div *ngIf="errorMessage" class="error-message">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>

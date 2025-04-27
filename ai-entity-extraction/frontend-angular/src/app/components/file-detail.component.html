@@ -1,0 +1,149 @@
+<div class="file-detail-container">
+    <div *ngIf="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading file details...</p>
+    </div>
+    
+    <div *ngIf="!loading && file">
+      <div class="header">
+        <div class="breadcrumb">
+          <a (click)="navigateToHistory()">File History</a>
+          <span class="breadcrumb-separator">/</span>
+          <span>File Details</span>
+        </div>
+        
+        <h2>{{ file.fileName }}</h2>
+        
+        <div class="file-meta">
+          <div class="meta-item">
+            <span class="meta-label">Status:</span>
+            <div class="status-badge" [ngClass]="getStatusClass(file.status)">
+              {{ file.status }}
+            </div>
+          </div>
+          
+          <div class="meta-item">
+            <span class="meta-label">Uploaded:</span>
+            <span>{{ file.uploadedAt | date:'medium' }}</span>
+          </div>
+          
+          <div class="meta-item">
+            <span class="meta-label">File ID:</span>
+            <span>{{ file.id }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="content-panels">
+        <div class="result-panel" *ngIf="processResult">
+          <div class="panel-header">
+            <h3>Extracted Entities</h3>
+            <div class="entities-count">
+              {{ processResult.entities.length }} entities found
+            </div>
+          </div>
+          
+          <div class="entity-cards" *ngIf="processResult.entities.length > 0">
+            <div class="entity-card" *ngFor="let entity of processResult.entities">
+              <div class="entity-header">
+                <h4>{{ entity.name }}</h4>
+                <div class="entity-category" [style.backgroundColor]="getCategoryColor(entity.category, 0.15)" [style.color]="getCategoryColor(entity.category)">
+                  {{ entity.category }}
+                  <span *ngIf="entity.subType">({{ entity.subType }})</span>
+                </div>
+              </div>
+              
+              <div class="entity-confidence">
+                <div class="confidence-bar">
+                  <div class="confidence-fill" [style.width.%]="entity.confidence * 100" [style.backgroundColor]="getConfidenceColor(entity.confidence)"></div>
+                </div>
+                <span class="confidence-value">{{ (entity.confidence * 100).toFixed(1) }}% confidence</span>
+              </div>
+              
+              <div class="entity-details" *ngIf="entity.matches && entity.matches.length > 0">
+                <h5>Matches:</h5>
+                <div class="entity-matches">
+                  <div class="match-tag" *ngFor="let match of entity.matches">{{ match }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="empty-entities" *ngIf="processResult.entities.length === 0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p>No entities were found in this file.</p>
+          </div>
+        </div>
+        
+        <div class="waiting-panel" *ngIf="!processResult && file.status === 'Uploaded'">
+          <div class="waiting-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>Processing in Progress</h3>
+          <p>Your file is being analyzed by our AI service. This may take a moment.</p>
+          <div class="refresh-button" (click)="refreshFileDetails()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 4v6h-6"></path>
+              <path d="M1 20v-6h6"></path>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
+              <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
+            </svg>
+            Refresh
+          </div>
+        </div>
+        
+        <div class="error-panel" *ngIf="!processResult && file.status === 'Error'">
+          <div class="error-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3>Processing Error</h3>
+          <p>There was an error processing this file. Please try uploading a different file.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="!loading && !file && errorMessage" class="error-container">
+      <div class="error-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <h3>{{ errorMessage }}</h3>
+      <p>Unable to load the file details. Please try again.</p>
+      <button class="primary-button" (click)="navigateToHistory()">
+        Return to File History
+      </button>
+    </div>
+    
+    <div class="actions">
+      <button class="secondary-button" (click)="navigateToHistory()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to History
+      </button>
+      
+      <button class="primary-button" (click)="navigateToUpload()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        Upload New File
+      </button>
+    </div>
+  </div>

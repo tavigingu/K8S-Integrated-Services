@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "88:88" # Mapează portul 88 al host-ului la portul 88 al containerului
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/chatdb
+      - DB_NAME=chatdb
+      - SERVER_PORT=8080
+    depends_on:
+      - mongodb
+    # networks:
+    #   - app-network
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DATABASE=chatdb # Numele bazei de date implicite
+    volumes:
+      - mongodb-data:/data/db # Persistența datelor
+    ports:
+      - "27017:27017" # Opțional, pentru acces extern (ex. MongoDB Compass)
+    # networks:
+    #   - app-network
+
+volumes:
+  mongodb-data: # Volum pentru persistența datelor MongoDB
+
+# networks:
+#   app-network:
+#     driver: bridge

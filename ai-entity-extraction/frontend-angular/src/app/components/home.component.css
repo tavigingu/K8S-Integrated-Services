@@ -1,0 +1,142 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 0;
+  gap: 40px;
+}
+
+.hero-content {
+  flex: 1;
+}
+
+h1 {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #6b7280;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.primary-button,
+.secondary-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.primary-button {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.primary-button:hover {
+  background-color: #4338ca;
+  transform: translateY(-2px);
+}
+
+.secondary-button {
+  background-color: white;
+  color: #4f46e5;
+  border: 2px solid #4f46e5;
+}
+
+.secondary-button:hover {
+  background-color: #f5f5ff;
+  transform: translateY(-2px);
+}
+
+.hero-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5ff;
+  border-radius: 16px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin: 60px 0;
+}
+
+.feature-card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  background-color: #f5f5ff;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: #4f46e5;
+}
+
+.feature-card h3 {
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.feature-card p {
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-content {
+    order: 2;
+  }
+
+  .hero-image {
+    order: 1;
+    width: 100%;
+  }
+
+  .cta-buttons {
+    justify-content: center;
+  }
+}
