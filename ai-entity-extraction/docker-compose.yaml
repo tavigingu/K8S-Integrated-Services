@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend-angular
+      dockerfile: Dockerfile
+    ports:
+      - "98:98"
+    environment:
+      - apiUrl=http://localhost:99/api
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend-go
+      dockerfile: Dockerfile
+    ports:
+      - "99:99"
+    environment:
+      # Azure Blob Storage
+      - AZURE_BLOB_ACCOUNT_NAME=aiproiectstorage
+      - AZURE_BLOB_ACCOUNT_KEY=lkGR2Ge3nyM37LTayu+/UPxl/hujO7alwqCasw/u9o03eKt7olW3fnnzCX4mstJCYAjV0FhiH0td+AStnEn5PA==
+      - AZURE_BLOB_CONTAINER_NAME=storage-container
+      # Azure SQL Database
+      - AZURE_SQL_SERVER_NAME=text-processing-server
+      - AZURE_SQL_DB_NAME=text-processing-db
+      - AZURE_SQL_USERNAME=admindb
+      - AZURE_SQL_PASSWORD=30februariE
+      # Azure Cognitive Services
+      - AZURE_COGNITIVE_SERVICES_ENDPOINT=https://entityextraction.cognitiveservices.azure.com
+      - AZURE_COGNITIVE_SERVICES_KEY=5oH9m96M5AfcraEd3qugKsGF8H1ARyAmWFpQIMGOyanzOLtX2xB0JQQJ99BDACPV0roXJ3w3AAAaACOGm4f4
+      # Server Configuration
+      - PORT=99

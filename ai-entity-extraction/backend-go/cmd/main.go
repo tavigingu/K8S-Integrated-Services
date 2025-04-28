@@ -9,14 +9,14 @@ import (
 	"backend-go/internal/api"
 	"backend-go/internal/config"
 
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 )
 
 func main() {
-	// Încărcăm variabilele de mediu din fișierul .env (pentru dezvoltare locală)
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found, using environment variables")
-	}
+	// // Încărcăm variabilele de mediu din fișierul .env (pentru dezvoltare locală)
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Println("No .env file found, using environment variables")
+	// }
 
 	// Inițializăm configurația
 	cfg, err := config.LoadConfig()
@@ -30,7 +30,7 @@ func main() {
 	// Determinăm portul pentru server
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // Port implicit
+		port = "99" // Port implicit
 	}
 
 	// Pornire server

@@ -1,0 +1,44 @@
+# Etapa 1: Construirea aplicației Angular
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+# Copiem package.json și package-lock.json
+COPY package*.json ./
+
+# Instalăm dependențele
+RUN npm install
+
+# Copiem restul aplicației
+COPY . .
+
+RUN mkdir -p src/environments
+
+# Create or overwrite environment.prod.ts
+RUN echo "export const environment = { \
+    production: true, \
+    apiUrl: 'http://localhost:99/api', \
+    };" > src/environments/environment.prod.ts
+
+# Create or overwrite environment.ts
+RUN echo "export const environment = { \
+    production: false, \
+    apiUrl: 'http://localhost:99/api',  \
+    };" > src/environments/environment.ts
+# Construim aplicația pentru producție
+RUN npm run build
+
+# Etapa 2: Servirea aplicației cu Apache
+FROM httpd:2.4-alpine
+
+# Copiem configurația Apache
+COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+
+# Copiem fișierele statice construite din etapa anterioară
+COPY --from=build /app/dist/frontend-angular/browser /usr/local/apache2/htdocs/
+
+# Expunem portul 98
+EXPOSE 98
+
+# Pornim Apache
+CMD ["httpd-foreground"]

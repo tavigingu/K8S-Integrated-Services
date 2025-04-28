@@ -1,0 +1,26 @@
+FROM golang:1.24 AS builder
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copiem codul sursă
+COPY . .
+
+# Compilăm aplicația
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd
+
+FROM httpd:2.4-alpine
+
+# Copiem executabilul Go compilat
+COPY --from=builder /app/main /usr/local/bin/main
+
+# Copiem configurația apache
+COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+
+# Expunem portul 99
+EXPOSE 99
+
+# Pornim apache în background și aplicația Go în foreground
+CMD ["sh", "-c", "/usr/local/apache2/bin/httpd -D FOREGROUND & /usr/local/bin/main"]
