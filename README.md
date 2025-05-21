@@ -8,7 +8,7 @@ Show Image
 Project Overview
 ----------------
 
-![App architecture](.\architecture-diagram.jpg)
+![App architecture](architecture-diagram.jpg)
 
 
 This project demonstrates a modern microservices architecture deployed on Kubernetes. It consists of three main components:
