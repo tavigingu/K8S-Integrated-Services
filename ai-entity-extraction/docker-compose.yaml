@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./frontend-angular
+      dockerfile: Dockerfile
+    ports:
+      - "98:98"
+    environment:
+      - apiUrl=/api
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend-go
+      dockerfile: Dockerfile
+    ports:
+      - "99:99"
+    environment:
+      - AZURE_BLOB_ACCOUNT_NAME
+      - AZURE_BLOB_ACCOUNT_KEY
+      - AZURE_BLOB_CONTAINER_NAME
+      - AZURE_SQL_SERVER_NAME
+      - AZURE_SQL_DB_NAME
+      - AZURE_SQL_USERNAME
+      - AZURE_SQL_PASSWORD
+      - AZURE_COGNITIVE_SERVICES_ENDPOINT
+      - AZURE_COGNITIVE_SERVICES_KEY
+      - PORT

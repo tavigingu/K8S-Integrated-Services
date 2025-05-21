@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: text-frontend-service
+  namespace: default
+spec:
+  selector:
+    app: text-frontend
+  ports:
+    - port: 98
+      targetPort: 98
+      nodePort: 30098
+      protocol: TCP
+      name: http
+  type: NodePort

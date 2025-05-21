@@ -73,8 +73,3 @@ Thumbs.db
 .idea/
 *.sublime-project
 *.sublime-workspace
-
-# Ignoră fișierele de deployment Kubernetes
-*.kube
-k8s/
-*.yaml
