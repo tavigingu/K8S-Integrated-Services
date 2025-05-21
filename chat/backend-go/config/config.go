@@ -15,6 +15,7 @@ func ConnectDB() *mongo.Client {
 	mongoURI := os.Getenv("MONGO_URI")
 	if mongoURI == "" {
 		log.Fatal("Eroare: Variabila de mediu MONGO_URI nu este setată")
+		//mongoURI = "mongodb://localhost:27017" // Valoare implicită pentru dezvoltare locală
 	}
 
 	// Configurăm conexiunea la MongoDB

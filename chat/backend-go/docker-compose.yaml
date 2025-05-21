@@ -11,23 +11,17 @@ services:
       - SERVER_PORT=8080
     depends_on:
       - mongodb
-    # networks:
-    #   - app-network
+
 
   mongodb:
     image: mongo:latest
     environment:
-      - MONGO_INITDB_DATABASE=chatdb # Numele bazei de date implicite
+      - MONGO_INITDB_DATABASE=chatdb 
     volumes:
-      - mongodb-data:/data/db # Persistența datelor
+      - mongodb-data:/data/db 
     ports:
-      - "27017:27017" # Opțional, pentru acces extern (ex. MongoDB Compass)
-    # networks:
-    #   - app-network
+      - "27017:27017" #pentru acces extern (ex. MongoDB Compass)
+
 
 volumes:
-  mongodb-data: # Volum pentru persistența datelor MongoDB
-
-# networks:
-#   app-network:
-#     driver: bridge
+  mongodb-data: 

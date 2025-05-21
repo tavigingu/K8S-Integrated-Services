@@ -1,0 +1,5 @@
+FROM mysql:8.0
+
+COPY database_dump.sql /docker-entrypoint-initdb.d/
+
+RUN chown -R mysql:mysql /var/lib/mysql

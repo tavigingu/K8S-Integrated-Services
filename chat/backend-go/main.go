@@ -48,8 +48,7 @@ func main() {
 	// Rută pentru WebSocket
 	router.HandleFunc("/ws", handleConnections)
 
-	// Rute REST pentru compatibilitate și debugging
-	router.HandleFunc("/messages", getMessages).Methods("GET")
+	router.HandleFunc("/api/messages", getMessages).Methods("GET")
 
 	// Adaugăm middleware-ul CORS
 	corsHandler := handlers.CORS(

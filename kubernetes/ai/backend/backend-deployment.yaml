@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: text-backend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: text-backend
+  template:
+    metadata:
+      labels:
+        app: text-backend
+    spec:
+      containers:
+        - name: text-backend
+          image: tavigingu/text-backend:v14
+          ports:
+            - containerPort: 99
+          env:
+            - name: AZURE_BLOB_ACCOUNT_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_BLOB_ACCOUNT_NAME
+            - name: AZURE_BLOB_ACCOUNT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_BLOB_ACCOUNT_KEY
+            - name: AZURE_BLOB_CONTAINER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_BLOB_CONTAINER_NAME
+            - name: AZURE_SQL_SERVER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_SQL_SERVER_NAME
+            - name: AZURE_SQL_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_SQL_DB_NAME
+            - name: AZURE_SQL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_SQL_USERNAME
+            - name: AZURE_SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_SQL_PASSWORD
+            - name: AZURE_COGNITIVE_SERVICES_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_COGNITIVE_SERVICES_ENDPOINT
+            - name: AZURE_COGNITIVE_SERVICES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: AZURE_COGNITIVE_SERVICES_KEY
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: PORT
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+
+---
+

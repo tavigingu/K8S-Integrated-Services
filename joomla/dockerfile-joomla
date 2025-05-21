@@ -1,0 +1,11 @@
+FROM joomla:latest
+
+COPY ./joomla_dat_new/ /var/www/html/
+
+RUN chown -R www-data:www-data /var/www/html/
+
+RUN mkdir -p /var/www/html/tmp/regularlabs/custom_php && \
+    chown -R www-data:www-data /var/www/html/tmp && \
+    chmod -R 755 /var/www/html/tmp
+
+EXPOSE 80

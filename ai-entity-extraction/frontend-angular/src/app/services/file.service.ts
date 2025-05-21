@@ -53,6 +53,7 @@ export class FileService {
     const formData = new FormData();
     formData.append('file', file);
 
+
     return this.http.post<FileUploadResponse>(`${this.apiUrl}/files`, formData, {
       reportProgress: true,
       observe: 'events'
@@ -79,6 +80,10 @@ export class FileService {
   }
 
   getFiles(limit: number = 10, offset: number = 0): Observable<FilesListResponse> {
+    console.log(this.apiUrl);
+    console.log(`${this.apiUrl}/files?limit=${limit}&offset=${offset}`);
+    const url = `${this.apiUrl}/files?limit=${limit}&offset=${offset}`;
+    console.log('Fetching files from:', url);
     return this.http.get<FilesListResponse>(`${this.apiUrl}/files?limit=${limit}&offset=${offset}`).pipe(
       catchError(error => {
         console.error('Error fetching files:', error);

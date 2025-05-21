@@ -5,22 +5,20 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copiem codul sursă
+# copiem cod sursa
 COPY . .
 
 # Compilăm aplicația
 RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd
 
-FROM httpd:2.4-alpine
+FROM nginx:alpine
 
 # Copiem executabilul Go compilat
 COPY --from=builder /app/main /usr/local/bin/main
 
-# Copiem configurația apache
-COPY httpd.conf /usr/local/apache2/conf/httpd.conf
+# Copiem configurația  nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expunem portul 99
 EXPOSE 99
 
-# Pornim apache în background și aplicația Go în foreground
-CMD ["sh", "-c", "/usr/local/apache2/bin/httpd -D FOREGROUND & /usr/local/bin/main"]
+CMD ["sh", "-c", "nginx & /usr/local/bin/main"]

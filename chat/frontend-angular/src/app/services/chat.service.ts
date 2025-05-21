@@ -3,27 +3,33 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Message } from '../models/message.model';
 import { isPlatformBrowser } from '@angular/common';
-import { environment } from '../../environments/environment';
+//import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
   private socket: WebSocket | null = null;
-  // private apiUrl = 'http://localhost:8080';
-  // private wsUrl = 'ws://localhost:8080/ws';
-  private apiUrl = environment.apiUrl; // Folosește variabila de mediu
-  private wsUrl = environment.wsUrl;
+  // private apiUrl = 'http://localhost:30090/api';
+  // private wsUrl = 'ws://localhost:30090/ws';
+  private apiUrl = '/api';
+  private wsUrl = '/ws';
+  
   private messagesSubject = new Subject<Message>();
   public messages$ = this.messagesSubject.asObservable();
   private isBrowser: boolean;
 
   constructor(
     private http: HttpClient,
+    //private configService: ConfigService,
     @Inject(PLATFORM_ID) platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     
+    //const config = this.configService.getConfig();
+    //this.apiUrl = config.apiUrl;
+    //this.wsUrl = config.wsUrl;
+
     if (this.isBrowser) {
       this.connectWebSocket();
     }
@@ -65,6 +71,7 @@ export class ChatService {
 
   //Păstrăm metoda REST pentru încărcarea inițială sau backup
   getMessages(): Observable<Message[]> {
+    console.log('Fetching messages from:', `${this.apiUrl}/messages`);
     return this.http.get<Message[]>(`${this.apiUrl}/messages`);
   }
 }
