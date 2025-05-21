@@ -1,0 +1,80 @@
+# Ignoră fișierele de mediu pentru toate subproiectele
+.env
+*.env
+.env.local
+.env.development
+.env.production
+
+#deploy
+*.pem
+secret.yaml
+*-secret.yaml
+*-secret.yml
+secret*.yaml
+secret*.yml
+*/httpd.conf
+joomla/joomla_dat_new
+joomla/mysql_data
+joomla/new_compose
+
+
+kubernetes/prod/*.pem
+kubernetes/prod/*.yaml
+
+kubernetes/ai/backend/backend-secret.yaml 
+kubernetes/chat/backend/backend-secret.yaml 
+kubernetes/joomla/secret.yaml **/-secret.yaml **/-secret.yml **/secret.yaml **/secret.yml *.kube k8s/
+
+.vscode/ .idea/ *.sublime-project *.sublime-workspace
+
+# Ignoră fișierele specifice backend-go
+ai-entity-extraction/backend-go/bin/
+ai-entity-extraction/backend-go/*.exe
+ai-entity-extraction/backend-go/*.exe~
+ai-entity-extraction/backend-go/vendor/
+ai-entity-extraction/backend-go/*.log
+ai-entity-extraction/backend-go/go.sum
+ai-entity-extraction/backend-go/*.test
+ai-entity-extraction/backend-go/coverage.out
+
+# Ignoră fișierele specifice frontend-angular
+frontend-angular/node_modules/
+frontend-angular/dist/
+frontend-angular/.angular/
+frontend-angular/*.log
+frontend-angular/.env
+frontend-angular/.env.local
+
+# Ignoră fișierele specifice chat
+chat/node_modules/
+chat/dist/
+chat/build/
+chat/.env
+chat/*.log
+
+# Ignoră fișierele specifice joomla
+joomla/cache/
+joomla/tmp/
+joomla/logs/
+joomla/administrator/cache/
+joomla/configuration.php
+joomla/.env
+
+# Ignoră fișierele temporare și de sistem
+*.log
+*.tmp
+*.temp
+tmp/
+.DS_Store
+Thumbs.db
+
+# Ignoră fișierele generate de IDE-uri
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignoră fișierele de deployment Kubernetes
+*.kube
+k8s/
+*.yaml
