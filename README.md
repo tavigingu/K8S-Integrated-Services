@@ -17,6 +17,18 @@ This project demonstrates a modern microservices architecture deployed on Kubern
 
 The platform is designed to be scalable, fault-tolerant, and easily manageable through Kubernetes orchestration.
 
+Kubernetes Cluster Architecture
+-------------------------------
+
+The entire platform is deployed on a Kubernetes cluster consisting of:
+
+-   **Master Node (kube1)**: Controls the cluster operations and hosts the Kubernetes API server
+-   **Worker Node**: Executes the workloads (deployments and pods)
+
+This two-node setup provides a clean separation between control plane and workload execution, demonstrating proper Kubernetes architecture principles. Both nodes are implemented as virtual machines for flexibility and resource optimization.
+
+![Cluster](k8s-cluster.png)
+
 Architecture
 ------------
 
