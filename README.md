@@ -3,8 +3,6 @@ Web Platform with Chat & AI Entity Extraction
 
 A Kubernetes-based web platform that integrates a content management system with real-time chat capabilities and AI-powered entity extraction services.
 
-Show Image
-
 Project Overview
 ----------------
 
